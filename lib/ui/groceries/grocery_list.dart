@@ -12,28 +12,32 @@ class GroceryList extends StatefulWidget {
 
 class _GroceryListState extends State<GroceryList> {
 
+  List<Grocery> groceryItems = [...dummyGroceryItems];
 
-  void onCreate() {
-    // TODO-4 - Navigate to the form screen using the Navigator push \
-    Navigator.push(
+  void onCreate() async {
+    // TODO-4 - Navigate to the form screen using the Navigator push
+    final newGroceryItem = await  Navigator.push(
       context, 
       MaterialPageRoute(
         builder: (context) => NewItem(),
       )
     );
+    setState(() {
+      groceryItems.add(newGroceryItem);
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     Widget content = const Center(child: Text('No items added yet.'));
 
-    if (dummyGroceryItems.isNotEmpty) {
+    if (groceryItems.isNotEmpty) {
 
        // TODO-1 - Display groceries with an Item builder and  LIst Tile
       content = ListView.builder(
-        itemCount: dummyGroceryItems.length,
+        itemCount: groceryItems.length,
         itemBuilder: (context, index) {
-          return GroceryTile(grocery: dummyGroceryItems[index]);
+          return GroceryTile(grocery: groceryItems[index]);
         }
       );
     }
@@ -68,8 +72,7 @@ class GroceryTile extends StatelessWidget {
         color: grocery.category.color,
       ),
       title: Text(grocery.name),
-      subtitle: Text('Quantity: ${grocery.quantity}'),
-      trailing: Icon(Icons.more_vert),
+      trailing: Text('Quantity: ${grocery.quantity}', style: TextStyle(fontSize: 15)),
     );
   }
 }

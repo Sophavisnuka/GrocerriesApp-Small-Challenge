@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-
+import 'package:uuid/uuid.dart';
 import '../../models/grocery.dart';
+
+const uuid = Uuid();
 
 class NewItem extends StatefulWidget {
   const NewItem({super.key});
@@ -43,10 +45,20 @@ class _NewItemState extends State<NewItem> {
 
   void onReset() {
     // Will be implemented later - Reset all fields to the initial values
+    _nameController.text = defautName;
+    _quantityController.text = defaultQuantity.toString();
+    _selectedCategory = defaultCategory;
   }
 
   void onAdd() {
     // Will be implemented later - Create and return the new grocery
+    final newGrocery = Grocery(
+      id: uuid.v4(), 
+      name: _nameController.text, 
+      quantity: int.parse(_quantityController.text), 
+      category: _selectedCategory,
+    );
+    Navigator.of(context).pop(newGrocery);
   }
 
   @override
@@ -76,7 +88,24 @@ class _NewItemState extends State<NewItem> {
                 Expanded(
                   child: DropdownButtonFormField<GroceryCategory>(
                     initialValue: _selectedCategory,
-                    items: [  ],
+                    decoration:  InputDecoration(label: Text('Category')),
+                    items: [
+                      for(var category in GroceryCategory.values)
+                        DropdownMenuItem(
+                          value: category,
+                          child: Row(
+                            children: [
+                              Container(
+                                width: 25,
+                                height: 25,
+                                color: category.color,
+                              ),
+                              SizedBox(width: 7),
+                              Text(category.name),
+                            ],
+                          ),
+                        ),
+                    ],
                     onChanged: (value) {
                       if (value != null) {
                         setState(() {
