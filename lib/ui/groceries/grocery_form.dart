@@ -28,7 +28,6 @@ class _NewItemState extends State<NewItem> {
   @override
   void initState() {
     super.initState();
-
     // Initialize intputs with default settings
     _nameController.text = defautName;
     _quantityController.text = defaultQuantity.toString();
@@ -37,7 +36,6 @@ class _NewItemState extends State<NewItem> {
   @override
   void dispose() {
     super.dispose();
-
     // Dispose the controlers
     _nameController.dispose();
     _quantityController.dispose();

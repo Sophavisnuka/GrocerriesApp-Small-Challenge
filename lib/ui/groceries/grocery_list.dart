@@ -12,8 +12,6 @@ class GroceryList extends StatefulWidget {
 
 class _GroceryListState extends State<GroceryList> {
 
-  // List<Grocery> groceryItems = [...dummyGroceryItems];
-
   void onCreate() async {
     // TODO-4 - Navigate to the form screen using the Navigator push
     final newGroceryItem = await Navigator.push(
