@@ -24,18 +24,33 @@ class _GroceryListState extends State<GroceryList> {
       dummyGroceryItems.add(newGroceryItem);
     });
   }
+  void onEdit(int index) async {
+    final updatedGrocery = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => NewItem(editGrocery: dummyGroceryItems[index]),
+      ),
+    );
+
+    if (updatedGrocery != null) {
+      setState(() {
+        dummyGroceryItems[index] = updatedGrocery;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    Widget content = const Center(child: Text('No items added yet.'));
-
+    Widget content = Center(child: Text('No items added yet.'));
     if (dummyGroceryItems.isNotEmpty) {
-
        // TODO-1 - Display groceries with an Item builder and  LIst Tile
       content = ListView.builder(
         itemCount: dummyGroceryItems.length,
         itemBuilder: (context, index) {
-          return GroceryTile(grocery: dummyGroceryItems[index]);
+          return GroceryTile(
+            grocery: dummyGroceryItems[index],
+            onTap: () => onEdit(index),
+          );
         }
       );
     }
@@ -56,21 +71,29 @@ class _GroceryListState extends State<GroceryList> {
 }
 
 class GroceryTile extends StatelessWidget {
-  const GroceryTile({super.key, required this.grocery});
-
+  const GroceryTile({super.key, required this.grocery, required this.onTap});
+  
   final Grocery grocery;
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
       // TODO-2 - Display groceries with an Item builder and  LIst Tile
-    return ListTile(
-      leading: Container(
-        width: 25,
-        height: 25,
-        color: grocery.category.color,
-      ),
-      title: Text(grocery.name),
-      trailing: Text('Quantity: ${grocery.quantity}', style: TextStyle(fontSize: 15)),
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(10),
+      child: Container(
+        padding: EdgeInsets.all(10),
+        child: ListTile(
+          leading: Container(
+            width: 25,
+            height: 25,
+            color: grocery.category.color
+          ),
+          title: Text(grocery.name),
+          trailing: Text('Quantity: ${grocery.quantity}', style: TextStyle(fontSize: 15)),
+        ),
+      )
     );
   }
 }
